@@ -1,0 +1,17 @@
+{
+  "expo": {
+    "sdkVersion": "38.0.0"
+  },
+  "ios": {
+    "config": {
+      "googleMapsApiKey": "REPLACE_KEY"
+    }
+  }
+  "android":{
+        "config":{
+            "googleMaps":{
+                "apiKey": "REPLACE_KEY"
+            }
+        }
+  }
+}
