@@ -1,0 +1,1 @@
+./row31-checkpoint-2.sh: line 9: row31-stderr.sh: command not found

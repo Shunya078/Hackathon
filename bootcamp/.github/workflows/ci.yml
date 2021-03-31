@@ -1,0 +1,49 @@
+name: ci
+
+on:
+  - push
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Node 12
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+
+      - name: Set up Ruby 2.6
+        uses: actions/setup-ruby@v1
+        with:
+          ruby-version: 2.6.x
+
+      - name: gem Install Prettier
+        run: |
+          cd ruby
+          gem install prettier
+        working-directory: ./bootcamp
+
+      - name: npm Install Prettier
+        run: |
+          npm install -g prettier
+
+      - name: Install Prettier Plugin
+        run: |
+          cd ruby
+          npm install --save-dev prettier @prettier/plugin-ruby
+        working-directory: ./bootcamp
+
+      - name: Run Prettier
+        run: |
+          cd ruby
+          ./node_modules/.bin/prettier --write '**/*.rb'
+        working-directory: ./bootcamp
+
+      - name: Commit format
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Format

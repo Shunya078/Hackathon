@@ -1,0 +1,8 @@
+task_name,created_at,date(due_on/finish_date),state,comment
+hoge,2020-10-08,2020-10-07,done,
+hoge,2020-10-08,2020-10-07,done,
+piyo,2020-10-08,2020-10-08,yet,piyopiyo
+piyo,2020-10-08,2020-10-08,yet,piyopiyo
+hoge,2020-10-08,2020-10-09,yet,hogehoge
+fuga,2020-10-08,2020-10-12,yet,fugafuga
+fuga,2020-10-08,2020-10-12,yet,fugafuga
