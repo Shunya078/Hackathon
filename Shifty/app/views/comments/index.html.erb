@@ -1,0 +1,63 @@
+<div align="center">
+<%= stylesheet_link_tag "custom", :media => "all" %>
+<!-- Main content -->
+<div class="original_card">
+  <% if user_signed_in? %> <!-- ユーザーがログインしているか調べる -->
+    <!-- ユーザーがログインしていた時の処理 -->
+    <!-- マイページへリダイレクトするのでここから↓ -->
+    <h2 style="margin-top:30px;"> 現在 <%= current_user.name %> さんが<br>ログインしています </h2>
+    <h3> 性別：
+    <% if current_user.gender != "female" %>
+    男
+    <% else %>
+    女
+    <% end %>
+    </h3>
+    <!-- defaultで値入れてあったのでここでエラー吐かれなさそうです -->
+    <% if current_user.miseinen.blank? %>
+      <h3>生年月日 <%= current_user.miseinen.strftime("%Y年%m月%d日") %> </h3>
+    <% end %>
+    <h3> あなたは
+      <% if current_user.tencho_bool != false %>
+          店長です。
+      <% else %>
+          バイトです。
+      <% end %>
+    </h3>
+    <a href="/users/<%= current_user.id %>/mypage" class="custom_button">マイシフト</a><br>
+    <a class="custom_button" href="/users/sign_out" style="color:red;">ログアウト</a> <!-- ログアウトをする -->
+    <!-- ここまで↑いらないかもです -->
+  <% else %>
+    <!-- ユーザーがログインしていなかった時の処理 -->
+    <h2 style="padding-top:50px;"> 新規登録はこちら </h2>
+    <%= link_to "新規登録", new_user_registration_path, class: 'post',:style=>"
+    display: block;
+    text-decoration: none;
+    background-color: #F37373;
+    border-style: solid;
+    color: #000000;
+    width: 500px;
+    margin: 50px;
+    border-radius: 15px;
+    "%> <!-- 新規登録画面に移行する -->
+    <h2 style="padding-top:50px;"> ログインはこちら </h2>
+    <%= link_to "ログイン", new_user_session_path, class: 'post' ,:style=>"
+    display: block;
+    text-decoration: none;
+    background-color: #139CFF;
+    border-style: solid;
+    color: #000000;
+    width: 500px;
+    margin: 50px;
+    border-radius: 15px;
+    "%><!-- ログイン画面に移行する -->
+  <% end %>
+</div>
+<footer>
+  <div>ふったー
+  <% if !current_user.nil? %>
+  <%= link_to "ログアウト", destroy_user_session_path, method: :delete %>
+  <% end %>
+  </div>
+</footer>
+</div>

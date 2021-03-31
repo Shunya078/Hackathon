@@ -1,0 +1,44 @@
+<!-- Main content -->
+<div class="notice alert-success">
+  <%=  notice %>
+</div>
+<h2>マイシフト</h2>
+<div class="row">
+  <% @user_shift_forms.each do |user_shift_form| %>
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header card-header-text card-header-primary">
+          <div class="card-text">
+            <h4 class="card-title">
+              <%= user_shift_form.shift_week.start_date %>
+              ~<%= user_shift_form.shift_week.end_date %>
+            </h4>
+          </div>
+        </div>
+        <div class="card-body">
+          <table class="table">
+            <thead>
+              <tr>
+                <th class="text-center">曜日</th>
+                <th class="text-center">開始</th>
+                <th class="text-center">終了</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% user_shift_form.user_shifts.each do |user_shift| %>
+                <tr>
+                  <td class="text-lg-center"><%= youbi_tag(user_shift.start_date) %></td>
+                  <td class="text-center"><%= user_shift.start_hour %>:00</td>
+                  <td class="text-center"><%= user_shift.end_hour %>:00<% if user_shift.overnight? %>(翌日)<% end %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+          <% if user_shift_form.editable? %>
+            <%= link_to  '修正', %(/user_shift_forms/#{user_shift_form.id}/edit), class: 'btn btn-primary btn-round pull-right' %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

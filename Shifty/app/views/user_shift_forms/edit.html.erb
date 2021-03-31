@@ -1,0 +1,44 @@
+<h2><%= current_user.name %>さんの<%= @start_date.strftime('%Y-%m-%d') %>
+      から<%= @end_date.strftime('%Y-%m-%d') %>までのシフト入力</h2>
+<table class="table">
+  <tr>
+    <th class="shift-form-th"></th>
+    <th class="shift-form-th">希望出勤日</th>
+    <th class="shift-form-th">希望出勤時刻（時）</th>
+    <th class="shift-form-th">希望退勤日</th>
+    <th class="shift-form-th">希望退勤時刻（時）</th>
+
+  </tr>
+
+<%= form_for(@user_shift_form) do |f| %>
+  <%= f.hidden_field :id %>
+    <% @start_date.upto(@end_date) do |date| %>
+      <% created_shift = @user_shifts.find { |user_shift| user_shift.setup_on?(date) } %>
+      <% date_str = date.strftime('%Y-%m-%d') %>
+      <% tomorrow_str = date.tomorrow.strftime('%Y-%m-%d') %>
+      <tr>
+        <td><%= check_box_tag "user_shift_form[new_shifts][#{date}][is_checked]", true, created_shift.present? %></td>
+        <td class="shift-form-td"><%= date %></td>
+        <td>
+        <div class="dropdown1">
+            <%= select_tag "user_shift_form[new_shifts][#{date}][start_hour]", options_for_select([[0,0],[1, 1], [2, 2], [3, 3],[4,4],[5,5],[6,6],[7,7],[8,8],[9,9],[10,10],[11,11],[12,12],[13,13],[14,14],[15,15],[16,16],[17,17],[18,18],[19,19],[20,20],[21,21],[22,22],[23,23]], created_shift&.start_hour), class: 'dropdown-item1' %>
+        </div>
+          </div>
+        </td>
+        <td>
+        <div class="dropdown2">
+              <%= select_tag "user_shift_form[new_shifts][#{date}][end_date]", options_for_select([[date_str, date_str], [tomorrow_str, tomorrow_str]], created_shift&.end_date&.strftime('%Y-%m-%d')) , class: 'dropdown-item2'%>
+        </div>
+        </td>
+        <td>
+          <div class="dropdown1">
+              <%= select_tag "user_shift_form[new_shifts][#{date}][end_hour]", options_for_select([[0,0],[1, 1], [2, 2], [3, 3],[4,4],[5,5],[6,6],[7,7],[8,8],[9,9],[10,10],[11,11],[12,12],[13,13],[14,14],[15,15],[16,16],[17,17],[18,18],[19,19],[20,20],[21,21],[22,22],[23,23]], created_shift&.end_hour) , class: 'dropdown-item1'%>
+          </div>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+  <div class="text-right">
+    <%= f.submit '提出', class: 'btn btn-primary btn-round pull-right' %>
+  </div>
+<% end %>

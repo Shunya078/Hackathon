@@ -1,0 +1,49 @@
+<div align="center">
+<%= stylesheet_link_tag "custom", :media => "all" %>
+<!-- Main content -->
+<div class="original_card">
+<h2>ログイン</h2>
+
+<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+  <div class="field">
+    <%= f.label :email, "メールアドレス", style: "color:#000000; font-size:24px;" %><br />
+    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :password, "パスワード", style: "color:#000000; font-size:24px;" %><br />
+    <%= f.password_field :password, autocomplete: "current-password" %>
+  </div>
+
+  <% if devise_mapping.rememberable? %>
+    <div class="field">
+      <%= f.check_box :remember_me %>
+      <%= f.label :remember_me , "パスワードを覚える"%>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit "ログイン" ,:style=>"
+    display: block;
+    text-decoration: none;
+    background-color: #139CFF;
+    border-style: solid;
+    color: #000000;
+    width: 500px;
+    margin: 50px;
+    border-radius: 15px;
+    "%>
+  </div>
+<% end %>
+
+<%= render "devise/shared/links" %>
+</div>
+<p style="margin-bottom:200px;"></p>
+<footer>
+  <div>ふったー
+  <% if !current_user.nil? %>
+    <a class="btn-gradient-radius" href="/logout">ログアウト</a>
+  <% end %>
+  </div>
+</footer>
+</div>

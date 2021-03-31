@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en" class="perfect-scrollbar-off">
+  <head>
+    <title>シフティー</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag 'application', media: 'all' %>
+    <%= javascript_include_tag 'application' %>
+  </head>
+  <body class="">
+    <div class="wrapper ">
+      <div class="sidebar" data-color="purple" data-background-color="white" data-image="../assets/img/sidebar-1.jpg">
+        <div class="logo">
+          <a href="#" class="simple-text logo-normal">
+            Shifty
+          </a>
+        </div>
+        <div class="sidebar-wrapper">
+          <ul class="nav">
+            <li class="nav-item">
+              <a class="nav-link" href="/work_shift_table/home">
+                <p>シフト表</p>
+              </a>
+            </li>
+            <li class="nav-item ">
+              <a class="nav-link" href="/work_shift_table/members">
+                <p>従業員一覧</p>
+              </a>
+            </li>
+            <% if user_signed_in? %>
+              <li class="nav-item ">
+                <a class="nav-link" href="/users/<%= current_user.id %>/mypage">
+                  <p>マイシフト</p>
+                </a>
+              </li>
+              <li class="nav-item ">
+                <a class="nav-link" href="/users/sign_out">
+                  <p>ログアウト</p>
+                </a>
+              </li>
+            <% else %>
+              <li class="nav-item ">
+                <a class="nav-link" href="/users/sign_in">
+                  <p>サインイン</p>
+                </a>
+              </li>
+              <li class="nav-item ">
+                <a class="nav-link" href="/users/sign_up">
+                  <p>新規登録</p>
+                </a>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+      <div class="main-panel">
+        <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
+          <div class="container-fluid">
+            <div class="navbar-wrapper">
+            <% if user_signed_in? %>
+              <a class="navbar-brand" href="javascript:;"><%= current_user.name %></a>
+              <% end %>
+            </div>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="navbar-toggler-icon icon-bar"></span>
+              <span class="navbar-toggler-icon icon-bar"></span>
+              <span class="navbar-toggler-icon icon-bar"></span>
+            </button>
+          </div>
+        </nav>
+        <div class="content">
+          <div class="container-fluid">
+            <%= yield %>
+            <p style="margin-bottom:200px;"></p>
+          </div>
+        </div>
+        <footer class="footer">
+          <div class="container-fluid">
+            <nav class="float-left">
+              <ul>
+                <li>
+                  <a href="https://www.creative-tim.com">
+                    Creative Tim
+                  </a>
+                </li>
+                <li>
+                  <a href="https://creative-tim.com/presentation">
+                    About Us
+                  </a>
+                </li>
+                <li>
+                  <a href="http://blog.creative-tim.com">
+                    Blog
+                  </a>
+                </li>
+                <li>
+                  <a href="https://www.creative-tim.com/license">
+                    Licenses
+                  </a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </footer>
+      </div>
+    </div>
+    <script>
+      $(document).ready(function () {
+        $().ready(function () {
+          $sidebar = $('.sidebar');
+
+          $sidebar_img_container = $sidebar.find('.sidebar-background');
+
+          $full_page = $('.full-page');
+
+          $sidebar_responsive = $('body > .navbar-collapse');
+
+          window_width = $(window).width();
+
+          fixed_plugin_open = $('.sidebar .sidebar-wrapper .nav li.active a p').html();
+
+          if (window_width > 767 && fixed_plugin_open == 'Dashboard') {
+            if ($('.fixed-plugin .dropdown').hasClass('show-dropdown')) {
+              $('.fixed-plugin .dropdown').addClass('open');
+            }
+
+          }
+
+          $('.fixed-plugin a').click(function (event) {
+            // Alex if we click on switch, stop propagation of the event, so the dropdown will not be hide, otherwise we set the  section active
+            if ($(this).hasClass('switch-trigger')) {
+              if (event.stopPropagation) {
+                event.stopPropagation();
+              } else if (window.event) {
+                window.event.cancelBubble = true;
+              }
+            }
+          });
+
+          $('.fixed-plugin .active-color span').click(function () {
+            $full_page_background = $('.full-page-background');
+
+            $(this).siblings().removeClass('active');
+            $(this).addClass('active');
+
+            var new_color = $(this).data('color');
+
+            if ($sidebar.length != 0) {
+              $sidebar.attr('data-color', new_color);
+            }
+
+            if ($full_page.length != 0) {
+              $full_page.attr('filter-color', new_color);
+            }
+
+            if ($sidebar_responsive.length != 0) {
+              $sidebar_responsive.attr('data-color', new_color);
+            }
+          });
+
+          $('.fixed-plugin .background-color .badge').click(function () {
+            $(this).siblings().removeClass('active');
+            $(this).addClass('active');
+
+            var new_color = $(this).data('background-color');
+
+            if ($sidebar.length != 0) {
+              $sidebar.attr('data-background-color', new_color);
+            }
+          });
+
+          $('.fixed-plugin .img-holder').click(function () {
+            $full_page_background = $('.full-page-background');
+
+            $(this).parent('li').siblings().removeClass('active');
+            $(this).parent('li').addClass('active');
+
+
+            var new_image = $(this).find("img").attr('src');
+
+            if ($sidebar_img_container.length != 0 && $('.switch-sidebar-image input:checked').length != 0) {
+              $sidebar_img_container.fadeOut('fast', function () {
+                $sidebar_img_container.css('background-image', 'url("' + new_image + '")');
+                $sidebar_img_container.fadeIn('fast');
+              });
+            }
+
+            if ($full_page_background.length != 0 && $('.switch-sidebar-image input:checked').length != 0) {
+              var new_image_full_page = $('.fixed-plugin li.active .img-holder').find('img').data('src');
+
+              $full_page_background.fadeOut('fast', function () {
+                $full_page_background.css('background-image', 'url("' + new_image_full_page + '")');
+                $full_page_background.fadeIn('fast');
+              });
+            }
+
+            if ($('.switch-sidebar-image input:checked').length == 0) {
+              var new_image = $('.fixed-plugin li.active .img-holder').find("img").attr('src');
+              var new_image_full_page = $('.fixed-plugin li.active .img-holder').find('img').data('src');
+
+              $sidebar_img_container.css('background-image', 'url("' + new_image + '")');
+              $full_page_background.css('background-image', 'url("' + new_image_full_page + '")');
+            }
+
+            if ($sidebar_responsive.length != 0) {
+              $sidebar_responsive.css('background-image', 'url("' + new_image + '")');
+            }
+          });
+
+          $('.switch-sidebar-image input').change(function () {
+            $full_page_background = $('.full-page-background');
+
+            $input = $(this);
+
+            if ($input.is(':checked')) {
+              if ($sidebar_img_container.length != 0) {
+                $sidebar_img_container.fadeIn('fast');
+                $sidebar.attr('data-image', '#');
+              }
+
+              if ($full_page_background.length != 0) {
+                $full_page_background.fadeIn('fast');
+                $full_page.attr('data-image', '#');
+              }
+
+              background_image = true;
+            } else {
+              if ($sidebar_img_container.length != 0) {
+                $sidebar.removeAttr('data-image');
+                $sidebar_img_container.fadeOut('fast');
+              }
+
+              if ($full_page_background.length != 0) {
+                $full_page.removeAttr('data-image', '#');
+                $full_page_background.fadeOut('fast');
+              }
+
+              background_image = false;
+            }
+          });
+
+          $('.switch-sidebar-mini input').change(function () {
+            $body = $('body');
+
+            $input = $(this);
+
+            if (md.misc.sidebar_mini_active == true) {
+              $('body').removeClass('sidebar-mini');
+              md.misc.sidebar_mini_active = false;
+
+              $('.sidebar .sidebar-wrapper, .main-panel').perfectScrollbar();
+
+            } else {
+
+              $('.sidebar .sidebar-wrapper, .main-panel').perfectScrollbar('destroy');
+
+              setTimeout(function () {
+                $('body').addClass('sidebar-mini');
+
+                md.misc.sidebar_mini_active = true;
+              }, 300);
+            }
+
+            // we simulate the window Resize so the charts will get updated in realtime.
+            var simulateWindowResize = setInterval(function () {
+              window.dispatchEvent(new Event('resize'));
+            }, 180);
+
+            // we stop the simulation of Window Resize after the animations are completed
+            setTimeout(function () {
+              clearInterval(simulateWindowResize);
+            }, 1000);
+
+          });
+        });
+      });
+    </script>
+    <style>
+      #ofBar {
+        background: #de2e2e;
+        text-align: left;
+        z-index: 999999999;
+        font-size: 16px;
+        color: #fff;
+        padding: 18px 5%;
+        font-weight: 400;
+        display: block;
+        position: relative;
+        top: 0px;
+        box-shadow: 0 6px 13px -4px rgba(0, 0, 0, 0.25);
+      }
+
+      #ofBar b {
+        font-size: 15px !important;
+      }
+
+      #count-down {
+        display: initial;
+        padding-left: 10px;
+        font-weight: bold;
+      }
+
+      #close-bar {
+        font-size: 22px;
+        color: #3e3947;
+        margin-right: 0;
+        position: absolute;
+        right: 5%;
+        background: white;
+        opacity: 0.5;
+        padding: 0px;
+        height: 25px;
+        line-height: 21px;
+        width: 25px;
+        border-radius: 50%;
+        text-align: center;
+        top: 18px;
+        cursor: pointer;
+        z-index: 9999999999;
+        font-weight: 200;
+      }
+
+      #close-bar:hover {
+        opacity: 1;
+      }
+
+      #btn-bar {
+        background-color: #fff;
+        color: #40312d;
+        border-radius: 4px;
+        padding: 10px 20px;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 12px;
+        opacity: .95;
+        margin-left: 15px;
+        top: 0px;
+        position: relative;
+        cursor: pointer;
+        text-align: center;
+        box-shadow: 0 5px 10px -3px rgba(0, 0, 0, .23), 0 6px 10px -5px rgba(0, 0, 0, .25);
+      }
+
+      #btn-bar:hover {
+        opacity: 0.9;
+      }
+
+      #btn-bar {
+        opacity: 1;
+      }
+
+      #btn-bar span {
+        color: red;
+      }
+
+      .right-side {
+        float: right;
+        margin-right: 60px;
+        top: -6px;
+        position: relative;
+        display: block;
+      }
+
+      #oldPriceBar {
+        text-decoration: line-through;
+        font-size: 16px;
+        color: #fff;
+        font-weight: 400;
+        top: 2px;
+        position: relative;
+      }
+
+      #newPrice {
+        color: #fff;
+        font-size: 19px;
+        font-weight: 700;
+        top: 2px;
+        position: relative;
+        margin-left: 7px;
+      }
+
+      #fromText {
+        font-size: 15px;
+        color: #fff;
+        font-weight: 400;
+        margin-right: 3px;
+        top: 0px;
+        position: relative;
+      }
+
+      @media (max-width: 991px) {
+        .right-side {
+          float: none;
+          margin-right: 0px;
+          margin-top: 5px;
+          top: 0px
+        }
+
+        #ofBar {
+          padding: 50px 20px 20px;
+          text-align: center;
+        }
+
+        #btn-bar {
+          display: block;
+          margin-top: 10px;
+          margin-left: 0;
+        }
+      }
+
+      @media (max-width: 768px) {
+        #count-down {
+          display: block;
+          font-size: 25px;
+        }
+      }
+    </style>
+  </body>
+</html>
